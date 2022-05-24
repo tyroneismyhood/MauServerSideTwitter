@@ -7,13 +7,15 @@ async function run() {
 	if (process.env.NODE_ENV == 'development') {
 		axios.defaults.baseURL = 'http://localhost:3000/api/twitter'
 	} else {
-		axios.defaults.baseURL = 'https://twitterfollowingcheck.herokuapp.com/api/twitter/user-following'
+		axios.defaults.baseURL = 'https://twitterdings.vercel.app/api/twitter'
 	}
 
 	axios.defaults.headers.common['Authorization'] = process.env.AUTH as string
 
 	for (const tracker of twitterTrackers) {
+		console.log(tracker.token)
 		const twitterClient = new TwitterApi(tracker.token as string)
+		
 		if (!twitterClient) {
 			continue
 		}
@@ -23,7 +25,7 @@ async function run() {
 			.then((res) => res.data.id)
 			.catch(() => {})
 
-		if (userId) {
+		if (!userId) {
 			continue
 		}
 
@@ -39,6 +41,7 @@ async function run() {
 				})
 				.then((res) => res.data)
 				.catch((err) => {
+					console.log(err)
 					return
 				})
 
@@ -66,7 +69,7 @@ async function run() {
 			} else {
 				axios({
 					method: 'post',
-					url: `/user-following?following=${tracker.username}`,
+					url: `/user-following?follower=${filteredFollowers}&following=${tracker.username}`,
 					headers: {
 						Authorization: process.env.AUTH,
 					},
