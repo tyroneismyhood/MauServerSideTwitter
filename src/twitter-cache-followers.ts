@@ -7,14 +7,13 @@ let user = 'tyroneismyhood'
 let testToken = ''
 
 async function run() {
-	axios.defaults.baseURL = 'https://twitterfollowingcheck.herokuapp.com/api/twitter/user-following'
-
+	axios.defaults.baseURL = 'https://twitterdings.vercel.app/api/twitter'
 	axios.defaults.headers.common['Authorization'] = process.env.AUTH as string
 
 	for (const tracker of twitterTrackers) {
 		if (tracker.username === user) {
-			// const twitterClient = new TwitterApi(tracker.token as string)
-			const twitterClient = new TwitterApi(testToken)
+			const twitterClient = new TwitterApi(tracker.token as string)
+			// const twitterClient = new TwitterApi(testToken)
 			if (!twitterClient) {
 				continue
 			}
